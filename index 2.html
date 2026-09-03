@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffd7e6">
+<title>我的电子衣橱 ♡</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=Press+Start+2P&display=swap');
+:root{
+ --pink:#ff8fb3;--pink2:#ffd7e6;--pink3:#fff1f6;--deep:#6b2142;--lav:#eadcff;
+ --line:#ff9fbe;--cream:#fffafd;--shadow:0 5px 0 #ffc0d4;
+}
+*{box-sizing:border-box}
+html{background:#ffeef5}
+body{margin:0;background:linear-gradient(#fff7fa,#fff);color:var(--deep);
+ font-family:'DotGothic16','PingFang SC','Microsoft YaHei',sans-serif}
+button,input,select,textarea{font:inherit;color:var(--deep)}
+button{border:2px solid var(--line);background:#fff;padding:10px 13px;border-radius:14px;box-shadow:0 3px 0 #ffc6d8;cursor:pointer}
+button:active{transform:translateY(2px);box-shadow:0 1px 0 #ffc6d8}
+button.primary{background:#ff9fbe;color:#fff}
+button.lilac{background:#eadcff}
+h1,h2,h3{margin:0}
+h1,.pixel{font-family:'Press Start 2P','DotGothic16',monospace}
+h1{font-size:18px;line-height:1.7}
+h2{font-size:18px}.tiny{font-size:12px}
+.app{max-width:1100px;margin:auto;min-height:100vh}
+.top{padding:14px 14px 8px;background:linear-gradient(#ffd4e3,#fff7fa);border-bottom:2px solid #ffb3ca}
+.status{font-size:11px;display:flex;justify-content:space-between;gap:8px}
+.header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 4px}
+.brand{display:flex;gap:10px;align-items:center}
+.bow{font-size:38px;filter:drop-shadow(0 2px 0 #fff)}
+.datebox{border:2px solid #ffabc5;border-radius:16px;background:#fff;padding:8px 11px;text-align:center;box-shadow:var(--shadow);min-width:112px}
+.nav{display:flex;overflow:auto;gap:6px;padding:8px 0 12px;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav button{white-space:nowrap;min-width:max-content;padding:8px 12px;border-radius:12px;background:#fff}
+.nav button.active{background:#ff9fbe;color:#fff}
+main{padding:12px}
+.view{display:none}.view.show{display:block}
+.panel{border:2px solid #ffabc5;border-radius:20px;background:rgba(255,255,255,.92);padding:16px;margin-bottom:14px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.panel:before{content:"♡  ˚₊‧  🎀  ‧₊˚  ♡";position:absolute;right:10px;top:8px;color:#ffb0c9;font-size:12px;opacity:.8}
+.hero{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:linear-gradient(135deg,#fff,#fff0f6)}
+.hero h2{font-size:22px;margin:5px 0 10px}
+.actions{display:flex;gap:7px;flex-wrap:wrap}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.stat{border:2px dashed #ffb4ca;border-radius:15px;padding:12px;background:#fff7fa}
+.stat b{display:block;font-family:'Press Start 2P';font-size:14px;margin-top:8px;color:#6b2142}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.card{border:2px solid #ffb2ca;border-radius:16px;background:#fff;padding:8px;overflow:hidden}
+.card img,.thumb{width:100%;aspect-ratio:1;object-fit:contain;background:#fff3f7;border-radius:10px;display:block}
+.card .name{font-weight:700;margin-top:7px}.meta{font-size:12px;color:#9a5471;margin-top:3px}
+.filters{display:flex;gap:6px;overflow:auto;padding-bottom:9px}.filters button{white-space:nowrap}
+.week{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.day{border:2px solid #ffb2ca;border-radius:15px;padding:10px;background:#fff}
+.day img{width:100%;aspect-ratio:1;object-fit:contain;background:#fff4f8;border-radius:10px;margin:7px 0}
+.empty{padding:25px;text-align:center;border:2px dashed #ffb2ca;border-radius:15px}
+form{display:grid;gap:10px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+label{font-size:13px}input,select,textarea{width:100%;border:2px solid #ffb2ca;border-radius:12px;padding:10px;background:#fff}
+textarea{min-height:90px}.upload{border:2px dashed #ff9fbe;border-radius:16px;padding:15px;text-align:center;background:#fff6fa}
+.preview{max-width:220px;max-height:220px;display:block;margin:10px auto;border-radius:12px}
+.modal{position:fixed;inset:0;background:rgba(255,237,245,.93);display:none;align-items:flex-end;justify-content:center;z-index:20}
+.modal.show{display:flex}.modalbox{background:#fff;border:2px solid #ff9fbe;border-radius:22px 22px 0 0;box-shadow:0 -6px 0 #ffc4d7;width:min(720px,100%);max-height:94vh;overflow:auto;padding:18px}
+.close{float:right;border-radius:50%;width:38px;height:38px;padding:0}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#6b2142;color:#fff;border-radius:99px;padding:10px 15px;z-index:50;display:none}
+.model-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.model-stage{min-height:430px;border:2px solid #ffb0c8;border-radius:20px;background:radial-gradient(circle at 50% 20%,#fff,#fff0f6);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.model-stage img.body{max-width:82%;max-height:400px;object-fit:contain;filter:drop-shadow(0 5px 3px rgba(107,33,66,.12))}
+.tryon{position:absolute;left:50%;transform:translateX(-50%);width:54%;object-fit:contain;pointer-events:none;mix-blend-mode:multiply}
+.tryon.top{top:27%}.tryon.bottom{top:48%}.tryon.dress{top:25%;width:62%}.tryon.bag{top:47%;left:68%;width:25%}.tryon.shoes{top:78%;width:30%}
+.model-controls{display:grid;gap:8px;align-content:start}
+.control{border:2px solid #ffd0df;border-radius:15px;padding:10px;background:#fff8fb}
+.control h3{font-size:14px;margin-bottom:7px}.control small{display:block;color:#9a5471}
+.slider{width:100%}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.note{font-size:12px;color:#8b526b;line-height:1.6}
+.badge{display:inline-block;background:#ffd7e6;border-radius:99px;padding:3px 8px;font-size:11px}
+.cutout{background:repeating-conic-gradient(#f8e7ee 0 25%,#fff 0 50%) 0/16px 16px}
+@media(min-width:800px){main{padding:18px}.grid{grid-template-columns:repeat(4,1fr)}.week{grid-template-columns:repeat(7,1fr)}.hero{grid-template-columns:1fr 220px}.modal{align-items:center}.modalbox{border-radius:22px;max-height:90vh}.stats{grid-template-columns:repeat(6,1fr)}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+ <div class="status"><span>♡ kawaii closet</span><span id="clock"></span></div>
+ <div class="header">
+  <div class="brand"><div class="bow">🎀</div><div><h1>我的<br>电子衣橱</h1><div class="tiny">V2.0　♡ 在线</div></div></div>
+  <div class="datebox"><b id="date"></b><br><span id="weekday"></span></div>
+ </div>
+ <nav class="nav" id="nav">
+  <button data-view="home" class="active">🏠 首页</button>
+  <button data-view="items">👗 我的衣物</button>
+  <button data-view="model">🧍 无脸模特</button>
+  <button data-view="outfits">🎀 我的穿搭</button>
+  <button data-view="week">📅 一周计划</button>
+  <button data-view="favorites">♡ 收藏夹</button>
+  <button data-view="settings">⚙ 设置</button>
+ </nav>
+</header>
+<main>
+<section id="home" class="view show">
+ <div class="panel hero">
+  <div><span class="badge">三丽鸥感 · 粉白可爱风</span><h2>欢迎回来 ♡</h2><p>把衣服放进衣橱，再让你的无脸模特帮你试穿。</p>
+   <div class="actions"><button class="primary" onclick="openAdd()">＋ 添加衣物</button><button class="lilac" onclick="showView('model')">🧍 创建模特</button><button onclick="aiOutfit()">✨ AI 搭配</button></div>
+  </div>
+  <div style="font-size:70px;text-align:center">🎀<br>♡</div>
+ </div>
+ <div class="stats" id="statsCards"></div>
+ <div class="panel" style="margin-top:14px"><h2>今日穿搭 ♡</h2><div id="todayOutfit"></div></div>
+ <div class="panel"><h2>快捷功能</h2><div class="actions">
+   <button onclick="openAdd()">✂️ 上传并自动抠图</button><button onclick="showView('items')">👚 查看衣橱</button><button onclick="showView('week')">📅 安排一周</button>
+ </div></div>
+</section>
+
+<section id="items" class="view">
+ <div class="panel"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><h2>我的衣物</h2><button class="primary" onclick="openAdd()">＋ 添加</button></div>
+  <div class="filters" id="filters"></div><div class="grid" id="itemsGrid"></div>
+ </div>
+</section>
+
+<section id="model" class="view">
+ <div class="panel"><h2>🧍 我的无脸 AI 模特</h2><p class="note">上传一张<strong>纯黑的人体展示图/剪影图</strong>，网页会把它作为你的模特基础。模特不生成五官，只保留身体轮廓。衣服可叠加预览，并可调位置与大小。</p>
+  <div class="actions"><button class="primary" onclick="document.getElementById('bodyFile').click()">＋ 上传身体展示图</button><button onclick="clearBody()">清除模特</button></div>
+  <input id="bodyFile" type="file" accept="image/*" hidden>
+ </div>
+ <div class="model-wrap">
+  <div class="model-stage" id="modelStage"><div class="empty" id="modelEmpty">还没有模特<br>请上传纯黑身体展示图 ♡</div></div>
+  <div class="model-controls">
+   <div class="control"><h3>📏 身材资料</h3><div class="row">
+    <label>身高<input id="height" type="number" placeholder="165"></label><label>肩宽<input id="shoulder" type="number" placeholder="40"></label>
+    <label>胸围<input id="bust" type="number" placeholder="84"></label><label>腰围<input id="waist" type="number" placeholder="64"></label>
+    <label>臀围<input id="hip" type="number" placeholder="90"></label><label>腿长<input id="leg" type="number" placeholder="98"></label>
+   </div><button style="margin-top:8px" onclick="saveBodyInfo()">保存身材资料</button></div>
+   <div class="control"><h3>👗 当前试穿</h3><div id="tryList" class="chips"></div><button onclick="clearTryOn()">清除试穿</button></div>
+   <div class="control"><h3>✨ 试穿说明</h3><small>这是手机浏览器版的“叠图试穿”原型：衣服会自动去背景后叠加到模特上。真正布料物理/3D人体拟合需要额外的 AI 试衣模型或服务器。</small></div>
+  </div>
+ </div>
+</section>
+
+<section id="outfits" class="view"><div class="panel"><div class="actions"><button class="primary" onclick="createOutfit()">＋ 创建穿搭</button><button onclick="aiOutfit()">✨ AI 生成一套</button></div><div class="grid" id="outfitsGrid" style="margin-top:12px"></div></div></section>
+
+<section id="week" class="view"><div class="panel"><div class="actions"><button class="primary" onclick="planWeek()">✨ AI 安排周一～周日</button><button onclick="saveToast('本周计划已保存 ♡')">保存本周计划</button></div><div class="week" id="weekGrid" style="margin-top:12px"></div></div></section>
+
+<section id="favorites" class="view"><div class="panel"><h2>♡ 收藏夹</h2><div class="grid" id="favGrid"></div></div></section>
+
+<section id="settings" class="view"><div class="panel"><h2>⚙ 设置</h2><p>图片与衣物数据保存在<strong>本机浏览器</strong>中。</p><p class="note">如果清除 Safari 网站数据，衣橱图片和资料也可能被清除。以后如果需要云端同步，再接数据库即可。</p><button onclick="resetData()">重置演示数据</button></div></section>
+</main>
+</div>
+
+<div class="modal" id="modal"><div class="modalbox">
+ <div style="display:flex;justify-content:space-between;align-items:center"><h2>🎀 添加衣物</h2><button class="close" onclick="closeModal()">×</button></div>
+ <form id="itemForm">
+  <div class="upload"><input type="file" id="image" accept="image/*"><div id="previewArea">选择一张衣服照片 ♡</div><div class="actions" style="justify-content:center;margin-top:8px"><button type="button" onclick="cutoutCurrent()">✂️ 自动抠图</button><button type="button" onclick="runAI()">✨ AI 分类</button></div><div id="cutStatus" class="note"></div></div>
+  <div class="row"><label>衣物名称<input id="name" required placeholder="粉色针织开衫"></label><label>分类<select id="category"><option>上装</option><option>下装</option><option>连衣裙</option><option>包袋</option><option>鞋子</option></select></label></div>
+  <div class="row"><label>子分类<input id="type" placeholder="针织衫 / 牛仔裤 / 腋下包"></label><label>颜色<input id="color" placeholder="粉色"></label></div>
+  <div class="row"><label>品牌<input id="brand" placeholder="无"></label><label>季节<input id="season" placeholder="春 / 夏 / 秋 / 冬"></label></div>
+  <label>标签<input id="tags" placeholder="#甜美 #Y2K #日常"></label>
+  <label>备注<textarea id="note" placeholder="这件衣服适合……"></textarea></label>
+  <button class="primary" type="submit">♡ 保存到衣橱</button>
+ </form>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const KEY='sanrioDigitalCloset_v2';
+const DB_NAME='sanrioClosetImages_v2', STORE='images';
+const cats=['上装','下装','连衣裙','包袋','鞋子'];
+const dayNames=['周一','周二','周三','周四','周五','周六','周日'];
+let data=JSON.parse(localStorage.getItem(KEY)||'null');
+if(!data){data={items:[],outfits:[],week:{},filter:'全部',body:null,bodyInfo:{},tryOn:[]};seed();save();}
+function seed(){
+ const demo=[['粉色针织开衫','上装','针织衫','粉色','甜美'],['白色衬衫','上装','衬衫','白色','简约'],['蓝色牛仔裤','下装','牛仔裤','蓝色','Y2K'],['粉色短裙','下装','半身裙','粉色','甜美'],['粉色连衣裙','连衣裙','连衣裙','粉色','甜美'],['白色运动鞋','鞋子','运动鞋','白色','日常'],['粉色腋下包','包袋','腋下包','粉色','Y2K']];
+ data.items=demo.map((x,i)=>({id:Date.now()+i,name:x[0],category:x[1],type:x[2],color:x[3],style:x[4],tags:'#'+x[4],favorite:i===0,imageId:null,created:Date.now()}));
+ data.outfits=[{id:1,name:'周日咖啡时光',ids:data.items.slice(0,3).map(x=>x.id),style:'甜美日常'}];
+ for(let i=0;i<7;i++)data.week[i]=1;
+}
+function save(){localStorage.setItem(KEY,JSON.stringify(data))}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('show'));document.getElementById(v).classList.add('show');document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));render();window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>showView(b.dataset.view));
+function updateClock(){let d=new Date();document.getElementById('clock').textContent=d.toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});document.getElementById('date').textContent=d.toLocaleDateString('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit'});document.getElementById('weekday').textContent=['周日','周一','周二','周三','周四','周五','周六'][d.getDay()]}
+updateClock();setInterval(updateClock,1000);
+
+function db(){return new Promise((res,rej)=>{let r=indexedDB.open(DB_NAME,1);r.onupgradeneeded=()=>r.result.createObjectStore(STORE);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+async function putImg(blob){let d=await db();let id='img_'+Date.now()+'_'+Math.random().toString(16).slice(2);return new Promise((res,rej)=>{let tx=d.transaction(STORE,'readwrite');tx.objectStore(STORE).put(blob,id);tx.oncomplete=()=>res(id);tx.onerror=()=>rej(tx.error)})}
+async function getImg(id){if(!id)return '';let d=await db();return new Promise((res,rej)=>{let r=d.transaction(STORE).objectStore(STORE).get(id);r.onsuccess=()=>res(r.result?URL.createObjectURL(r.result):'');r.onerror=()=>rej(r.error)})}
+async function delImg(id){if(!id)return;let d=await db();d.transaction(STORE,'readwrite').objectStore(STORE).delete(id)}
+
+async function imgHtml(x){
+ if(!x)return '';
+ let u=await getImg(x.imageId);
+ return u?`<img src="${u}" alt="${esc(x.name)}">`:`<div class="empty">暂无图片</div>`;
+}
+function card(x){return `<div class="card" data-id="${x.id}"><div class="thumb cutout" id="thumb_${x.id}"></div><div class="name">${esc(x.name)}</div><div class="meta">${esc(x.category)} · ${esc(x.color)} · ${esc(x.style||'')}</div><div class="actions" style="margin-top:7px"><button onclick="toggleFav(${x.id})">${x.favorite?'♥ 已收藏':'♡ 收藏'}</button><button onclick="tryItem(${x.id})">试穿</button><button onclick="delItem(${x.id})">删除</button></div></div>`}
+async function hydrateImages(){for(const x of data.items){let el=document.getElementById('thumb_'+x.id);if(el&&x.imageId){let u=await getImg(x.imageId);if(u)el.innerHTML=`<img src="${u}" alt="${esc(x.name)}" style="width:100%;height:100%;object-fit:contain">`;}}}
+function render(){
+ const count=c=>data.items.filter(x=>x.category===c).length;
+ document.getElementById('statsCards').innerHTML=`<div class="stat">衣物总数<b>${data.items.length}</b></div>`+cats.map(c=>`<div class="stat">${c}<b>${count(c)}</b></div>`).join('');
+ document.getElementById('filters').innerHTML=['全部',...cats].map(c=>`<button class="${data.filter===c?'primary':''}" onclick="data.filter='${c}';save();render()">${c}</button>`).join('');
+ let arr=data.items.filter(x=>data.filter==='全部'||x.category===data.filter);
+ document.getElementById('itemsGrid').innerHTML=arr.map(card).join('')||'<div class="empty">衣橱还是空的 ♡</div>';
+ document.getElementById('favGrid').innerHTML=data.items.filter(x=>x.favorite).map(card).join('')||'<div class="empty">还没有收藏 ♡</div>';
+ document.getElementById('outfitsGrid').innerHTML=data.outfits.map(o=>`<div class="card"><div class="name">🎀 ${esc(o.name)}</div><div class="meta">${esc(o.style||'')}</div><div class="grid" style="margin-top:7px">${o.ids.map(id=>{let x=data.items.find(i=>i.id===id);return x?`<div class="card" style="padding:3px"><div class="thumb cutout" id="out_${o.id}_${id}"></div></div>`:''}).join('')}</div><button style="margin-top:7px" onclick="deleteOutfit(${o.id})">删除穿搭</button></div>`).join('')||'<div class="empty">还没有穿搭 ♡</div>';
+ let dow=new Date().getDay();let idx=dow===0?6:dow-1;let o=data.outfits.find(z=>z.id===data.week[idx])||data.outfits[0];
+ document.getElementById('todayOutfit').innerHTML=o?`<div style="font-size:18px;font-weight:700">🎀 ${esc(o.name)}</div><div class="grid" style="margin-top:9px">${o.ids.slice(0,4).map(id=>{let x=data.items.find(i=>i.id===id);return x?`<div class="card"><div class="thumb cutout" id="today_${id}"></div><div class="meta">${esc(x.name)}</div></div>`:''}).join('')}</div>`:'<div class="empty">今天还没有穿搭</div>';
+ document.getElementById('weekGrid').innerHTML=dayNames.map((d,i)=>{let o=data.outfits.find(z=>z.id===data.week[i]);return `<div class="day"><b>${d}</b>${o?`<div style="margin-top:7px;font-size:13px">${esc(o.name)}</div><div class="thumb cutout" id="week_${i}"></div><button onclick="pickDay(${i})">更换</button>`:`<div class="empty" style="margin-top:7px">空</div><button onclick="pickDay(${i})">添加</button>`}</div>`}).join('');
+ hydrateImages();renderModel();
+}
+async function fillEl(id,item){let el=document.getElementById(id);if(!el||!item?.imageId)return;let u=await getImg(item.imageId);if(u)el.innerHTML=`<img src="${u}" style="width:100%;height:100%;object-fit:contain">`}
+async function hydrateImages(){for(const x of data.items){await fillEl('thumb_'+x.id,x);for(const o of data.outfits){if(o.ids.includes(x.id))await fillEl(`out_${o.id}_${x.id}`,x);await fillEl(`today_${x.id}`,x)} }for(let i=0;i<7;i++){let o=data.outfits.find(z=>z.id===data.week[i]);if(o?.ids[0])await fillEl(`week_${i}`,data.items.find(x=>x.id===o.ids[0]))}}
+function toggleFav(id){let x=data.items.find(i=>i.id===id);if(x){x.favorite=!x.favorite;save();render()}}
+async function delItem(id){let x=data.items.find(i=>i.id===id);if(!x)return;if(confirm('确定删除这件衣物吗？')){await delImg(x.imageId);data.items=data.items.filter(i=>i.id!==id);data.outfits.forEach(o=>o.ids=o.ids.filter(i=>i!==id));data.tryOn=(data.tryOn||[]).filter(i=>i!==id);save();render();saveToast('衣物已删除 ♡')}}
+function openAdd(){document.getElementById('modal').classList.add('show');document.getElementById('itemForm').reset();document.getElementById('previewArea').textContent='选择一张衣服照片 ♡';document.getElementById('previewArea').dataset.src='';document.getElementById('cutStatus').textContent='';window.currentCutBlob=null}
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+document.getElementById('image').onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{document.getElementById('previewArea').innerHTML=`<img class="preview" src="${r.result}">`;document.getElementById('previewArea').dataset.src=r.result;window.currentRawFile=f};r.readAsDataURL(f)}
+async function cutoutCurrent(){
+ let f=window.currentRawFile;if(!f)return saveToast('请先选择衣服照片');
+ let st=document.getElementById('cutStatus');st.textContent='正在智能抠图…第一次使用会加载抠图模型，可能需要一点时间。';
+ try{
+  const mod=await import('https://esm.sh/@imgly/background-removal@1.7.0');
+  let blob=await mod.removeBackground(f,{progress:(p)=>{st.textContent='正在智能抠图… '+Math.round(p*100)+'%'}});
+  window.currentCutBlob=blob;
+  let u=URL.createObjectURL(blob);document.getElementById('previewArea').innerHTML=`<img class="preview cutout" src="${u}">`;
+  st.textContent='抠图完成 ♡ 已得到透明背景衣物。';
+ }catch(e){
+  st.textContent='自动抠图模型加载失败，已保留原图。请保持网络畅通后再试。';
+ }
+}
+function runAI(){let c=document.getElementById('category').value;let m={'上装':['针织上衣','粉色','甜美'],'下装':['牛仔裤','蓝色','Y2K'],'连衣裙':['连衣裙','粉色','甜美'],'包袋':['腋下包','粉色','Y2K'],'鞋子':['运动鞋','白色','日常']}[c];document.getElementById('type').value=m[0];document.getElementById('color').value=m[1];document.getElementById('season').value='春 / 秋';document.getElementById('tags').value='#'+m[2]+' #日常';saveToast('AI 分类完成 ♡')}
+
+document.getElementById('itemForm').onsubmit=async e=>{
+ e.preventDefault();let blob=window.currentCutBlob||window.currentRawFile;if(!blob)return saveToast('请先上传衣物照片');
+ let imageId=await putImg(blob);
+ data.items.unshift({id:Date.now(),name:document.getElementById('name').value,category:document.getElementById('category').value,type:document.getElementById('type').value,color:document.getElementById('color').value,brand:document.getElementById('brand').value,season:document.getElementById('season').value,tags:document.getElementById('tags').value,note:document.getElementById('note').value,imageId,favorite:false,created:Date.now()});
+ save();closeModal();render();saveToast('衣物已加入衣橱 ♡');
+}
+
+function aiOutfit(){if(!data.items.length)return saveToast('请先添加衣物');let ids=[];for(const c of ['上装','下装','连衣裙','包袋','鞋子']){let a=data.items.filter(x=>x.category===c);if(a.length)ids.push(a[Math.floor(Math.random()*a.length)].id)}let o={id:Date.now(),name:'AI 甜心搭配 #'+(data.outfits.length+1),ids,style:'甜美 · Y2K'};data.outfits.unshift(o);save();render();showView('outfits');saveToast('AI 穿搭生成完成 ♡')}
+function createOutfit(){if(!data.items.length)return saveToast('请先添加衣物');let ids=[];for(const c of ['上装','下装','连衣裙','包袋','鞋子']){let x=data.items.find(i=>i.category===c);if(x)ids.push(x.id)}let name=prompt('给穿搭起个名字：','今日甜心')||'今日甜心';data.outfits.unshift({id:Date.now(),name,ids,style:'自定义'});save();render();saveToast('穿搭创建成功 ♡')}
+function deleteOutfit(id){data.outfits=data.outfits.filter(o=>o.id!==id);save();render()}
+function planWeek(){if(!data.outfits.length)return saveToast('请先生成一套穿搭');for(let i=0;i<7;i++)data.week[i]=data.outfits[i%data.outfits.length].id;save();render();saveToast('一周穿搭安排好了 ♡')}
+function pickDay(i){if(!data.outfits.length)return saveToast('请先创建穿搭');let s=data.outfits.map((o,n)=>(n+1)+'. '+o.name).join('\\n');let n=parseInt(prompt('选择 '+dayNames[i]+' 的穿搭：\\n'+s,'1'))-1;if(data.outfits[n]){data.week[i]=data.outfits[n].id;save();render()}}
+function tryItem(id){let x=data.items.find(i=>i.id===id);if(!x)return;data.tryOn=data.tryOn||[];if(!data.tryOn.includes(id))data.tryOn.push(id);save();showView('model');saveToast(x.name+' 已放到模特上 ♡')}
+function clearTryOn(){data.tryOn=[];save();renderModel()}
+function renderModel(){
+ let stage=document.getElementById('modelStage');if(!stage)return;
+ if(!data.body){stage.innerHTML='<div class="empty">还没有模特<br>请上传纯黑身体展示图 ♡</div>'}
+ else{
+  stage.innerHTML=`<img class="body" id="bodyImg" src="">`;
+  getImg(data.body).then(u=>{if(document.getElementById('bodyImg'))document.getElementById('bodyImg').src=u});
+  let catsSeen={};(data.tryOn||[]).map(id=>data.items.find(x=>x.id===id)).filter(Boolean).forEach(x=>{let cls=x.category==='连衣裙'?'dress':x.category==='上装'?'top':x.category==='下装'?'bottom':x.category==='包袋'?'bag':'shoes';let img=document.createElement('img');img.className='tryon '+cls;img.alt=x.name;img.dataset.id=x.id;getImg(x.imageId).then(u=>img.src=u);stage.appendChild(img)});
+ }
+ document.getElementById('tryList').innerHTML=(data.tryOn||[]).map(id=>{let x=data.items.find(i=>i.id===id);return x?`<span class="badge">${esc(x.name)} <button style="padding:2px 7px;border:0;box-shadow:none" onclick="removeTry(${id})">×</button></span>`:''}).join('')||'<span class="note">去“我的衣物”点「试穿」</span>';
+}
+function removeTry(id){data.tryOn=(data.tryOn||[]).filter(x=>x!==id);save();renderModel()}
+document.getElementById('bodyFile').onchange=async e=>{let f=e.target.files[0];if(!f)return;let id=await putImg(f);if(data.body)await delImg(data.body);data.body=id;save();renderModel();saveToast('你的无脸模特已建立 ♡')}
+function clearBody(){if(data.body)delImg(data.body);data.body=null;save();renderModel()}
+function saveBodyInfo(){data.bodyInfo={height:document.getElementById('height').value,shoulder:document.getElementById('shoulder').value,bust:document.getElementById('bust').value,waist:document.getElementById('waist').value,hip:document.getElementById('hip').value,leg:document.getElementById('leg').value};save();saveToast('身材资料已保存 ♡')}
+function resetData(){if(confirm('确定重置演示衣橱吗？')){localStorage.removeItem(KEY);location.reload()}}
+function saveToast(t){let x=document.getElementById('toast');x.textContent=t;x.style.display='block';clearTimeout(window.tt);window.tt=setTimeout(()=>x.style.display='none',1800)}
+render();
+</script>
+</body>
+</html>
